@@ -1,7 +1,9 @@
 global _start
+extern printf
 
 section .data
     message db "Fibonacci Sequence:", 0x0a
+    outFormat db "%d", 0x0a, 0x00
 
 section .text
 _start:
@@ -16,6 +18,18 @@ printMessage:
     mov rsi, message; rsi: pointer to message
     mov rdx, 20     ; rdx: print length of 20 bytes
     syscall         ; call the write syscall for our intro message
+    ret
+
+printFib:
+    push rax            ; save registers to stack
+    push rbx
+
+    mov rdi, outFormat  ; set 1st argument (print format)
+    mov rsi, rbx        ; set 2nd argument (fib number to be printed)
+    call printf         ; printf(outFormat, rbx)
+
+    pop rbx             ; get registers back
+    pop rax
     ret
 
 initFib:
